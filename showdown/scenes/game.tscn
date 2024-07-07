@@ -1,10 +1,51 @@
-[gd_scene load_steps=3 format=3 uid="uid://b1gw3g2ex1fgb"]
+[gd_scene load_steps=8 format=3 uid="uid://b1gw3g2ex1fgb"]
 
-[ext_resource type="Script" path="res://scripts/game.gd" id="1_iy5vn"]
-[ext_resource type="Script" path="res://scripts/controller_socket.gd" id="2_rwp4d"]
+[ext_resource type="PackedScene" uid="uid://cyjehisfvs1xb" path="res://scenes/player.tscn" id="2_c6lwq"]
+
+[sub_resource type="GDScript" id="GDScript_en8vf"]
+script/source = "extends Node3D
+
+
+func _ready():
+	pass
+"
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pb2xc"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_jwjkp"]
+sky_material = SubResource("ProceduralSkyMaterial_pb2xc")
+
+[sub_resource type="Environment" id="Environment_5ckt0"]
+background_mode = 2
+sky = SubResource("Sky_jwjkp")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ls6na"]
+size = Vector2(20, 20)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qf3r2"]
+data = PackedVector3Array(10, 0, 10, -10, 0, 10, 10, 0, -10, -10, 0, 10, -10, 0, -10, 10, 0, -10)
 
 [node name="Game" type="Node3D"]
-script = ExtResource("1_iy5vn")
+script = SubResource("GDScript_en8vf")
 
-[node name="ContollerManager" type="Node" parent="."]
-script = ExtResource("2_rwp4d")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5ckt0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.965925, -0.224147, 0.129411, -0.129411, 0.851269, 0.508521, -0.224147, 0.474446, -0.851269, 0, 9, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_c6lwq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03785, 0)
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ls6na")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_qf3r2")
