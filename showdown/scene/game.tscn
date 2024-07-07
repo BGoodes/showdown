@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1gw3g2ex1fgb"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_iy5vn"]
+[ext_resource type="Script" path="res://scripts/controller_socket.gd" id="2_rwp4d"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_iy5vn")
+
+[node name="ContollerManager" type="Node" parent="."]
+script = ExtResource("2_rwp4d")
